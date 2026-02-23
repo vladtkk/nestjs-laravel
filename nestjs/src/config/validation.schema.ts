@@ -17,4 +17,8 @@ export const validationSchema = Joi.object({
   ARGON2_MEMORY_COST: Joi.number().integer().min(8192).default(65536),
   ARGON2_TIME_COST: Joi.number().integer().min(1).default(3),
   ARGON2_PARALLELISM: Joi.number().integer().min(1).default(4),
+
+  CORS_ORIGINS: Joi.string().default('*'),
+  THROTTLER_TTL: Joi.number().integer().default(60),
+  THROTTLER_LIMIT: Joi.number().integer().default(10),
 });
