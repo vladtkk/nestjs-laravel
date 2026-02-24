@@ -9,6 +9,7 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { TodoModule } from './todos/todo.module';
 import { HealthModule } from './health/health.module';
+import { NotificationModule } from './notifications/notification.module';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
 
 import databaseConfig from './config/database.config';
@@ -44,6 +45,7 @@ import { validationSchema } from './config/validation.schema';
     AuthModule,
     TodoModule,
     HealthModule,
+    NotificationModule,
   ],
   controllers: [AppController],
   providers: [
