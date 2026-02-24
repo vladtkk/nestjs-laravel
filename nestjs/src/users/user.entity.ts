@@ -5,21 +5,21 @@ import { Todo } from '../todos/todo.entity';
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column({ unique: true })
-  email: string;
+  email!: string;
 
   @Column({ select: false })
   @Exclude()
-  password: string;
+  password!: string;
 
   @OneToMany(() => Todo, (todo) => todo.user)
-  todos: Todo[];
+  todos!: Todo[];
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 }

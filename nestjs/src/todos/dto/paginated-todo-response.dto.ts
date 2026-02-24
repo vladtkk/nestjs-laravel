@@ -4,7 +4,7 @@ import { PageMetaDto } from '../../common/dto/page-meta.dto';
 
 export class PaginatedTodoResponseDto {
   @ApiProperty({ type: [TodoResponseDto] })
-  data: TodoResponseDto[];
+  readonly data!: TodoResponseDto[];
 
   @ApiProperty({ type: () => PageMetaDto })
   readonly meta!: PageMetaDto;

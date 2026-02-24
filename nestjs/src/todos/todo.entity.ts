@@ -13,11 +13,11 @@ export enum TodoStatus {
 export class Todo {
   @ApiProperty({ example: '123e4567-e89b-12d3-a456-426614174000' })
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @ApiProperty({ example: 'Buy groceries' })
   @Column()
-  title: string;
+  title!: string;
 
   @ApiProperty({ enum: TodoStatus, default: TodoStatus.PENDING })
   @Column({
@@ -25,23 +25,23 @@ export class Todo {
     enum: TodoStatus,
     default: TodoStatus.PENDING,
   })
-  status: TodoStatus;
+  status!: TodoStatus;
 
   @ApiProperty({ example: '123e4567-e89b-12d3-a456-426614174000' })
   @Column()
   @Index()
-  userId: string;
+  userId!: string;
 
   @Exclude()
   @ManyToOne(() => User, (user) => user.todos, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'userId' })
-  user: User;
+  user!: User;
 
   @ApiProperty()
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @ApiProperty()
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 }

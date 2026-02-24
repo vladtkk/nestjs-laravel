@@ -13,7 +13,7 @@ export class CreateTodoDto {
   @IsNotEmpty()
   @MaxLength(255)
   @Transform(({ value }) => value?.trim())
-  title: string;
+  title!: string;
 
   @ApiPropertyOptional({
     description: 'The status of the TODO item',

@@ -2,5 +2,5 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class LoginResponseDto {
   @ApiProperty()
-  access_token: string;
+  readonly access_token!: string;
 }
