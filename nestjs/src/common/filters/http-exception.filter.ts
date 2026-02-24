@@ -4,11 +4,14 @@ import {
   ExceptionFilter,
   HttpException,
   HttpStatus,
+  Logger,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
+  private readonly logger = new Logger(HttpExceptionFilter.name);
+
   catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
@@ -17,15 +20,22 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const isHttpException = exception instanceof HttpException;
     const status = isHttpException ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
 
-    const errorResponse = isHttpException ? (exception as HttpException).getResponse() : null;
+    if (!isHttpException) {
+      this.logger.error(
+        `Unexpected exception on ${request.method} ${request.url}`,
+        exception instanceof Error ? exception.stack : String(exception),
+      );
+    }
+
+    const errorResponse = isHttpException ? exception.getResponse() : null;
     const errorMessage = isHttpException
       ? typeof errorResponse === 'string'
         ? errorResponse
-        : (errorResponse as any)?.message || (errorResponse as any)?.error || 'Error'
+        : (errorResponse as Record<string, unknown>)?.message ?? (errorResponse as Record<string, unknown>)?.error ?? 'Error'
       : 'Internal server error';
 
     const errorName = isHttpException
-      ? (typeof errorResponse === 'object' && (errorResponse as any)?.error) || exception.name
+      ? (typeof errorResponse === 'object' && (errorResponse as Record<string, unknown>)?.error) || exception.name
       : 'InternalServerError';
 
     response.status(status).json({
