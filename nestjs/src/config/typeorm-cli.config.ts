@@ -6,7 +6,7 @@ export default new DataSource({
   port: parseInt(process.env.DB_PORT ?? '5432', 10),
   username: process.env.DB_USERNAME || 'postgres',
   password: process.env.DB_PASSWORD || 'postgres',
-  database: process.env.DB_DATABASE || 'nestjs_db',
+  database: process.env.DB_DATABASE || 'nestjs_laravel',
   entities: [__dirname + '/../**/*.entity.ts'],
   migrations: ['src/migrations/*.ts'],
   synchronize: false,

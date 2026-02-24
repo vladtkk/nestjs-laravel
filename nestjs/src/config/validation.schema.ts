@@ -8,7 +8,7 @@ export const validationSchema = Joi.object({
   DB_PORT: Joi.number().port().default(5432),
   DB_USERNAME: Joi.string().default('postgres'),
   DB_PASSWORD: Joi.string().allow('').default('postgres'),
-  DB_DATABASE: Joi.string().default('nestjs_db'),
+  DB_DATABASE: Joi.string().default('nestjs_laravel'),
   DB_SYNCHRONIZE: Joi.boolean().truthy('true').falsy('false').default(false),
 
   JWT_SECRET: Joi.string().min(16).default('superSecretKeyForDev'),
