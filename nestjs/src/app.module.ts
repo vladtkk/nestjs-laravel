@@ -2,7 +2,10 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 import { APP_GUARD } from '@nestjs/core';
+import { DataSource } from 'typeorm';
+import { addTransactionalDataSource } from 'typeorm-transactional';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
@@ -31,7 +34,14 @@ import { validationSchema } from './config/validation.schema';
         ...configService.get('database'),
         autoLoadEntities: true,
       }),
+      async dataSourceFactory(options) {
+        if (!options) {
+          throw new Error('TypeORM options are not provided');
+        }
+        return addTransactionalDataSource(new DataSource(options));
+      },
     }),
+    EventEmitterModule.forRoot(),
     ThrottlerModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => [

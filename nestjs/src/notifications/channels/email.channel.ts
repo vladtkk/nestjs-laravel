@@ -1,10 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-
 import { NotificationChannel } from './notification-channel.abstract';
 import { NotificationMessageDto } from '../dto/notification-message.dto';
 import { EmailNotification } from '../entities/email-notification.entity';
+import { NotificationChannelType } from '../notification.constants';
 
 @Injectable()
 export class EmailChannel extends NotificationChannel {
@@ -17,8 +17,8 @@ export class EmailChannel extends NotificationChannel {
     super();
   }
 
-  getName(): string {
-    return 'EMAIL';
+  getName(): NotificationChannelType {
+    return NotificationChannelType.EMAIL;
   }
 
   async send(message: NotificationMessageDto): Promise<void> {
@@ -27,11 +27,10 @@ export class EmailChannel extends NotificationChannel {
       subject: message.subject,
       body: message.body,
     });
-
     await this.notificationRepository.save(notification);
 
     this.logger.log(
-      `Sending email to user ${message.userId} | Subject: ${message.subject} | Body: ${message.body}`,
+      `Email notification saved for user ${message.userId} | Subject: ${message.subject}`,
     );
   }
 }
