@@ -5,6 +5,7 @@ import { Todo } from './todo.entity';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 import { ListTodosQueryDto } from './dto/list-todos-query.dto';
+import { PageMetaDto } from '../common/dto/page-meta.dto';
 
 @Injectable()
 export class TodoService {
@@ -21,7 +22,7 @@ export class TodoService {
     return this.todoRepository.save(todo);
   }
 
-  async findAll(userId: string, query?: ListTodosQueryDto): Promise<{ data: Todo[]; total: number }> {
+  async findAll(userId: string, query?: ListTodosQueryDto): Promise<{ data: Todo[]; meta: PageMetaDto }> {
     const { page = 1, limit = 20, status } = query || {};
     const skip = (page - 1) * limit;
 
@@ -32,7 +33,9 @@ export class TodoService {
       skip,
     });
 
-    return { data, total };
+    const meta = new PageMetaDto({ itemCount: total, pageOptionsDto: { page, limit } });
+
+    return { data, meta };
   }
 
   async findOne(id: string, userId: string): Promise<Todo> {
