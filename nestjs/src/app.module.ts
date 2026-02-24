@@ -35,7 +35,7 @@ import { validationSchema } from './config/validation.schema';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => [
         {
-          ttl: config.get<number>('THROTTLER_TTL') ?? 60,
+          ttl: (config.get<number>('THROTTLER_TTL') ?? 60) * 1000,
           limit: config.get<number>('THROTTLER_LIMIT') ?? 10,
         },
       ],
