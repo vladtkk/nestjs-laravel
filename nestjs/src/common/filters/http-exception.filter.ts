@@ -6,23 +6,25 @@ import {
   HttpStatus,
   Logger,
 } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { HttpAdapterHost } from '@nestjs/core';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
   private readonly logger = new Logger(HttpExceptionFilter.name);
 
+  constructor(private readonly httpAdapterHost: HttpAdapterHost) {}
+
   catch(exception: unknown, host: ArgumentsHost) {
+    const { httpAdapter } = this.httpAdapterHost;
     const ctx = host.switchToHttp();
-    const response = ctx.getResponse<Response>();
-    const request = ctx.getRequest<Request>();
 
     const isHttpException = exception instanceof HttpException;
     const status = isHttpException ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
 
     if (!isHttpException) {
+      const request = ctx.getRequest();
       this.logger.error(
-        `Unexpected exception on ${request.method} ${request.url}`,
+        `Unexpected exception on ${httpAdapter.getRequestMethod(request)} ${httpAdapter.getRequestUrl(request)}`,
         exception instanceof Error ? exception.stack : String(exception),
       );
     }
@@ -38,12 +40,14 @@ export class HttpExceptionFilter implements ExceptionFilter {
       ? (typeof errorResponse === 'object' && (errorResponse as Record<string, unknown>)?.error) || exception.name
       : 'InternalServerError';
 
-    response.status(status).json({
+    const responseBody = {
       statusCode: status,
       error: errorName,
       message: errorMessage,
       timestamp: new Date().toISOString(),
-      path: request.url,
-    });
+      path: httpAdapter.getRequestUrl(ctx.getRequest()),
+    };
+
+    httpAdapter.reply(ctx.getResponse(), responseBody, status);
   }
 }
