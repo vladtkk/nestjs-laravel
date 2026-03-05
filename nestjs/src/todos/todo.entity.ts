@@ -21,27 +21,26 @@ export class Todo {
 
   @ApiProperty({ enum: TodoStatus, default: TodoStatus.PENDING })
   @Column({
-    type: 'enum',
-    enum: TodoStatus,
+    type: 'varchar',
     default: TodoStatus.PENDING,
   })
   status!: TodoStatus;
 
   @ApiProperty({ example: '123e4567-e89b-12d3-a456-426614174000' })
-  @Column()
+  @Column({ name: 'user_id' })
   @Index()
   userId!: string;
 
   @Exclude()
   @ManyToOne(() => User, (user) => user.todos, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'userId' })
+  @JoinColumn({ name: 'user_id' })
   user!: User;
 
   @ApiProperty()
-  @CreateDateColumn()
+  @CreateDateColumn({ name: 'created_at' })
   createdAt!: Date;
 
   @ApiProperty()
-  @UpdateDateColumn()
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt!: Date;
 }
