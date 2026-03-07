@@ -1,0 +1,766 @@
+{
+	"info": {
+		"name": "nestjs-laravel",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Laravel",
+			"item": [
+				{
+					"name": "Health Check (up)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{laravel_url}}/up",
+							"host": [
+								"{{laravel_url}}"
+							],
+							"path": [
+								"up"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Health API",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{laravel_url}}/api/v1/health",
+							"host": [
+								"{{laravel_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"health"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Auth",
+					"item": [
+						{
+							"name": "Register",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"laravel@example.com\",\n    \"password\": \"StrongPass123\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{laravel_url}}/api/v1/auth/register",
+									"host": [
+										"{{laravel_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();",
+											"if (jsonData.accessToken) {",
+											"    pm.collectionVariables.set(\"laravel_token\", jsonData.accessToken);",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"laravel@example.com\",\n    \"password\": \"StrongPass123\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{laravel_url}}/api/v1/auth/login",
+									"host": [
+										"{{laravel_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Me",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{laravel_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{laravel_url}}/api/v1/auth/me",
+									"host": [
+										"{{laravel_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"me"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Todos",
+					"item": [
+						{
+							"name": "List Todos",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{laravel_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{laravel_url}}/api/v1/todos?limit=20&page=1",
+									"host": [
+										"{{laravel_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"todos"
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "20"
+										},
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "status",
+											"value": "pending",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Todo",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{laravel_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"title\": \"Sample Todo from Laravel\",\n    \"status\": \"pending\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{laravel_url}}/api/v1/todos",
+									"host": [
+										"{{laravel_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"todos"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Todo",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{laravel_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{laravel_url}}/api/v1/todos/:id",
+									"host": [
+										"{{laravel_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"todos",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Todo",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{laravel_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"title\": \"Updated Laravel Todo\",\n    \"status\": \"completed\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{laravel_url}}/api/v1/todos/:id",
+									"host": [
+										"{{laravel_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"todos",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Todo",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{laravel_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{laravel_url}}/api/v1/todos/:id",
+									"host": [
+										"{{laravel_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"todos",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "NestJS",
+			"item": [
+				{
+					"name": "Hello World",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{nestjs_url}}",
+							"host": [
+								"{{nestjs_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Health API",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{nestjs_url}}/api/v1/health",
+							"host": [
+								"{{nestjs_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"health"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Auth",
+					"item": [
+						{
+							"name": "Register",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"nestjs@example.com\",\n    \"password\": \"StrongPass123\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{nestjs_url}}/api/v1/auth/register",
+									"host": [
+										"{{nestjs_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();",
+											"if (jsonData.access_token) {",
+											"    pm.collectionVariables.set(\"nestjs_token\", jsonData.access_token);",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"nestjs@example.com\",\n    \"password\": \"StrongPass123\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{nestjs_url}}/api/v1/auth/login",
+									"host": [
+										"{{nestjs_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Me",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{nestjs_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{nestjs_url}}/api/v1/auth/me",
+									"host": [
+										"{{nestjs_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"me"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Todos",
+					"item": [
+						{
+							"name": "List Todos",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{nestjs_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{nestjs_url}}/api/v1/todos?limit=20&page=1",
+									"host": [
+										"{{nestjs_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"todos"
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "20"
+										},
+										{
+											"key": "page",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Todo",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{nestjs_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"title\": \"Sample Todo from NestJS\",\n    \"status\": \"pending\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{nestjs_url}}/api/v1/todos",
+									"host": [
+										"{{nestjs_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"todos"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Todo",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{nestjs_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{nestjs_url}}/api/v1/todos/:id",
+									"host": [
+										"{{nestjs_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"todos",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Todo",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{nestjs_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"title\": \"Updated NestJS Todo\",\n    \"status\": \"completed\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{nestjs_url}}/api/v1/todos/:id",
+									"host": [
+										"{{nestjs_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"todos",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Todo",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{nestjs_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{nestjs_url}}/api/v1/todos/:id",
+									"host": [
+										"{{nestjs_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"todos",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "laravel_url",
+			"value": "http://localhost:8000",
+			"type": "string"
+		},
+		{
+			"key": "nestjs_url",
+			"value": "http://localhost:3000",
+			"type": "string"
+		},
+		{
+			"key": "laravel_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "nestjs_token",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
